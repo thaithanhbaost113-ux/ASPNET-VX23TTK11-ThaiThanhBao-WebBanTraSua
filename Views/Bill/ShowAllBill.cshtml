@@ -1,0 +1,117 @@
+﻿@model List<Project.Areas.Identity.Data.Bill>;
+
+@{
+    ViewData["Title"] = "Đơn hàng đã mua";
+}
+<style>
+    .img-fixed-size {
+        width: 60px;
+        height: 100px; 
+        
+    }
+
+    .product-info {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .order-card {
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+        padding: 10px;
+        background-color: #f7f7f7; /* Màu nền */
+    }
+
+    
+</style>
+<div class="container mt-5">
+    <h1>Đơn hàng đã mua</h1>
+    @foreach (var order in Model)
+    {
+        <div class="order-card mt-3">
+            <div class="card-header">
+                Mã đơn hàng: @order.Id
+            </div>
+            <div class="card-body">
+                <p>Ngày mua: @order.BuyingDate</p>
+                <p>Tổng tiền: @order.Total.ToString("N0") VNĐ</p>
+                <div class="order-status">
+                    <strong>Trạng thái đơn hàng:</strong>
+                    @if (order.Status == 0)
+                    {
+                        <span class="text-warning">Chờ xác nhận</span>
+                    }
+                    else if (order.Status == 1)
+                    {
+                        <span class="text-primary">Đã xác nhận</span>
+                    }
+                    else if (order.Status == 2)
+                    {
+                        <span class="text-primary">Bắt đầu giao</span>
+                    }
+                    else if (order.Status == 3)
+                    {
+                        <span class="text-success">Giao thành công</span>
+                    }
+                    else if (order.Status == 4)
+                    {
+                        <span class="text-success">Đã nhận hàng</span>
+                    }
+                    else if (order.Status == 5)
+                    {
+                        <span class="text-success">Đã thanh toán</span>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Hủy</span>
+                    }
+                </div>
+                <div class="order-status mt-2">
+                    <strong>Trạng thái thanh toán:</strong>
+                    @if (order.StatusPayment == 0)
+                    {
+                        <span class="text-info">Thanh toán tiền mặt</span>
+                    }
+                    else if (order.StatusPayment == 1)
+                    {
+                        <span class="text-success">Đã thanh toán</span>
+                    }
+                    else if (order.StatusPayment == 2)
+                    {
+                        <span class="text-danger">Thanh toán thất bại</span>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Không xác định</span>
+                    }
+                </div>
+                @if (order.Status == 0)
+                {
+                    <a href="@Url.Action("ChangeStatusBill", new { id = order.Id, status = 6 })" class="btn btn-danger btn-cancel">Hủy đơn hàng</a>
+                }
+                @if (order.Status == 3)
+                {
+                    <a href="@Url.Action("ChangeStatusBill", new { id = order.Id, status = 4 })" class="btn btn-danger btn-cancel">Đã nhận</a>
+                }
+                @foreach (var item in order.BillItems)
+                {
+                    <div class="d-flex row mt-3" style="align-items: center; border-radius: 5px; background: #EEEEEE">
+
+                        <div class="col" style="">
+                            <p class="card-title"><b>@item.Name</b></p>
+                        </div>
+                        <div class="col">
+                            <img src="@item.UrlImage" class="card-img-top img-fixed-size" alt="...">
+                        </div>
+                        <div class="col">
+                            <p class="card-text">Giá: @item.Price?.ToString("N0") VNĐ</p>
+                        </div>
+                        <div class="col">
+                            <p class="card-text">Số lượng: @item.Number</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>

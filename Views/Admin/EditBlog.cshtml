@@ -1,0 +1,83 @@
+﻿@model Project.Models.BlogModel
+@{
+    Layout = "_DashboardLayout";
+}
+
+<style>
+    .card-header {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h2>@ViewData["Title"]</h2>
+            </div>
+            <div class="card-body">
+                <form asp-action="EditBlog" method="post" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="form-group">
+                        <label for="Title">Tiêu đề</label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="ImageFile">Chọn ảnh</label>
+                        <input type="file" name="ImageFile" class="form-control" />
+                        <span asp-validation-for="ImageFile" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="Conten">Nội dung</label>
+                        <textarea id="editor" asp-for="Conten" class="form-control"></textarea>
+                        <span asp-validation-for="Conten" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
+<script>
+    ClassicEditor.create(document.querySelector('#editor'), {
+        ckfinder: {
+            uploadUrl: '/Upload/UploadImage',
+            options: {
+                resourceType: 'Images'
+            }
+        },
+        toolbar: [
+            'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|', 'blockQuote', 'insertTable', 'imageUpload'
+        ],
+        image: {
+            toolbar: [
+                'imageTextAlternative', '|', 'imageStyle:full', 'imageStyle:side', 'imageResize'
+            ],
+            resizeUnit: '%',
+            styles: [
+                'full', 'side' 
+            ]
+        },
+        imageResize: {
+            options: [
+                100, 200, 300, 400, 500
+            ],
+            unit: 'px'
+        }
+    })
+        .catch(error => {
+            console.error(error);
+        });
+</script>
+
+

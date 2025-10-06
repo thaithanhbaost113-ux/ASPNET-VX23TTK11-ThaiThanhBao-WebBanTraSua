@@ -1,0 +1,202 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Project.Areas.Identity.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]Tiệm trà sữa</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/vendor.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
+    <link rel="stylesheet" href="~/E_Commerce.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script id="mcjs">!function (c, h, i, m, p) { m = c.createElement(h), p = c.getElementsByTagName(h)[0], m.async = 1, m.src = i, p.parentNode.insertBefore(m, p) }(document, "script", "https://chimpstatic.com/mcjs-connected/js/users/94d4ec11206b5dc82bd4fcb74/e1e0661b0629ed3d1222159e6.js");</script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<style>
+    /* Global background color */
+    body {
+        background-color: #f3f2ec; /* Soft beige-like color */
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    /* Header */
+    header {
+        background-color: #d1c6b1; /* A warm beige color for contrast */
+        color: #333333; /* Dark grey for text */
+        padding: 20px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 3px solid #b2a992; /* Slight darker beige line */
+    }
+
+    header h3 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    /* Sidebar */
+    .sidebar {
+        height: 100vh;
+        background-color: #bfb28d;
+        color: #333333;
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 250px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .sidebar .menu-item {
+        display: block;
+        margin: 15px 0;
+        padding: 15px 25px;
+        background-color: #f8e393;
+        border-radius: 8px;
+        transition: background-color 0.3s;
+        color: #333333;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .sidebar .menu-item:hover {
+        background-color: #8e7f5f; 
+        color: white;
+    }
+
+    .sidebar .menu-item i {
+        margin-right: 10px;
+    }
+
+    /* Main content */
+    .content {
+        margin-left: 250px;
+        padding: 30px;
+        color: #333333;
+        width: calc(100% - 250px);
+    }
+
+    /* Dropdown menu */
+    .dropdown-menu {
+        min-width: 180px;
+    }
+
+    .dropdown-item:hover {
+        background-color: #d1c6b1; 
+        color: #333333;
+    }
+
+    .dropdown-item {
+        padding: 10px 15px;
+    }
+
+    /* Footer */
+    footer {
+        background-color: #d1c6b1;
+        color: #333333;
+        text-align: center;
+        padding: 10px 0;
+        margin-top: 20px;
+        font-size: 14px;
+    }
+
+    footer a {
+        color: #333333;
+        text-decoration: none;
+    }
+
+    /* Responsive Design for Mobile */
+    @@media (max-width: 768px) {
+        .sidebar {
+            width: 200px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+
+        .content {
+            margin-left: 200px;
+            width: calc(100% - 200px);
+        }
+
+        header {
+            flex-direction: column;
+            padding: 15px;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            left: auto;
+            width: 200px;
+        }
+    }
+</style>
+
+<body>
+    <header>
+        <h3>@ViewData["Title"]</h3>
+        <div style="margin-left: 250px; width: 100%;" class="d-flex align-items-center justify-content-between">
+
+            <div class="main-logo">
+                <a style="font-size: 30px; font-weight: bold;" href="/">Tiệm trà sữa</a>
+            </div>
+
+            @if (User.IsInRole("Admin"))
+            {
+                <div class="dropdown">
+                    <a href="#" class="text-dark" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa-solid fa-user"></i> Hello, @UserManager.GetUserName(User)
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Quản lý tài khoản</a>
+                        <a class="dropdown-item" href="#">Thoát</a>
+                    </div>
+                </div>
+            }
+        </div>
+    </header>
+
+    <div class="d-flex">
+        <div class="sidebar">
+            <a class="menu-item" asp-controller="Admin" asp-action="AccControl">
+                <i class="fa fa-users"></i> Khách hàng
+            </a>
+            <a class="menu-item" asp-controller="Admin" asp-action="ProductControl">
+                <i class="fa fa-cogs"></i> Sản phẩm
+            </a>
+            <a class="menu-item" asp-controller="Admin" asp-action="ProductCategoryControl">
+                <i class="fa fa-cogs"></i> Thể loại sản phẩm
+            </a>
+            <a class="menu-item" asp-controller="Admin" asp-action="BillControl">
+                <i class="fa fa-box"></i> Đơn hàng
+            </a>
+            <a class="menu-item" asp-controller="Admin" asp-action="BlogControl">
+                <i class="fa fa-pen"></i> Bài viết
+            </a>
+        </div>
+
+        <div class="content">
+            @RenderBody()
+        </div>
+    </div>
+
+    @RenderSection("Scripts", false)
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

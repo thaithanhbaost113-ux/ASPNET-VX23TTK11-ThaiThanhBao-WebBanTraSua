@@ -1,0 +1,86 @@
+﻿@model ICollection<Project.Areas.Identity.Data.Receive>
+<div class="container">
+    <div class="d-flex mt-3 mb-3">
+        <a class="btn btn-success" style="float:left;margin-right:5px;"
+           asp-controller="Admin"
+           asp-action="AccControl">
+            Khách hàng
+        </a>
+        <a class="btn btn-success" style="float:left;margin-right:5px;"
+           asp-controller="Admin"
+           asp-action="ProductControl">
+            Sản phẩm
+        </a>
+
+        <a class="btn btn-success" style="float:left;margin-right:5px"
+           asp-controller="Admin"
+           asp-action="BillControl">
+            Đơn hàng
+        </a>
+
+        <a class="btn btn-success" style="float:left;margin-right:5px"
+           asp-controller="Admin"
+           asp-action="BlogControl">
+            Bài viết
+        </a>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Quản lý hóa đơn nhập hàng</h2>                    
+            <a asp-action="AddReceive" asp-controller="Admin" class="btn btn-primary">Tạo mới hóa đơn nhập hàng</a>
+                @foreach (var item in Model)
+                {
+                    <div class="card p-4" style="margin: 8px 0; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="invoiceNumber">Mã hóa đơn: @item.Id</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="invoiceDate">Ngày nhập: @item.Date?.ToString("dd/MM/yyyy")</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="invoiceDate">Trạng thái: Thành công</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Chi tiết hóa đơn</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Tên sản phẩm</th>
+                                                <th>Số lượng</th>
+                                                <th>Giá (VNĐ)</th>
+                                                <th>Thành tiền (VNĐ)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach(var detail in item.RecevieDetails)
+                                            {
+                                                <tr>
+                                                    <td>@detail.Id</td>
+                                                    <td>@detail.IdProductNavigation.NameProduct</td>
+                                                    <td>@detail.Number</td>
+                                                    <td>@detail.Price?.ToString("N0") VNĐ</td>
+                                                    <td>@(detail.Price * detail.Number) VNĐ</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+        </div>
+    </div>
+</div>

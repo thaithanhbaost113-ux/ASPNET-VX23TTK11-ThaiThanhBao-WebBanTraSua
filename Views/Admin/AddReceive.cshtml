@@ -1,0 +1,108 @@
+﻿@model Project.Areas.Identity.Data.Receive
+
+<div class="container">
+    <div class="d-flex mt-3 mb-3">
+        <a class="btn btn-success" style="margin-right:5px;" asp-controller="Admin" asp-action="AccControl">Khách hàng</a>
+        <a class="btn btn-success" style="margin-right:5px;" asp-controller="Admin" asp-action="ProductControl">Sản phẩm</a>
+        <a class="btn btn-success" style="margin-right:5px;" asp-controller="Admin" asp-action="BillControl">Đơn hàng</a>
+        <a class="btn btn-success" style="margin-right:5px;" asp-controller="Admin" asp-action="ReceiveControl">Nhập hàng</a>
+        <a class="btn btn-success" style="margin-right:5px;" asp-controller="Admin" asp-action="BlogControl">Bài viết</a>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <form asp-action="AddReceive" method="post" id="createReceiveForm">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <table class="table">
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label asp-for="Provider" class="control-label">Nhà cung cấp</label>
+                                <select asp-for="Provider" class="form-control">
+                                    <option value="">Chọn nhà cung cấp</option>
+                                    @foreach (var provider in ViewBag.Providers)
+                                    {
+                                        <option value="@provider.Id">@provider.Name</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Provider" class="text-danger"></span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group d-none">
+                                <input asp-for="Id" class="form-control" value="1"/>
+                                <span asp-validation-for="Id" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Date" class="control-label">Ngày cung cấp</label>
+                                <input asp-for="Date" class="form-control" />
+                                <span asp-validation-for="Date" class="text-danger"></span>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+                <div id="receiveDetailsContainer">
+                </div>
+
+                <button type="button" class="btn btn-primary" id="addDetailBtn">+ Thêm chi tiết</button>
+
+                <div class="form-group d-flex justify-content-center mt-3">
+                    <input type="submit" value="Tạo phiếu nhận" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var products = @Html.Raw(Json.Serialize(ViewBag.Products));
+            var detailCounter = 0;
+            var optionsHtml = '';
+            products.forEach(function (product) {
+                optionsHtml += '<option value="' + product.id + '">' + product.nameProduct + '</option>';
+            });
+
+            function generateRandomId(length) {
+                var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                var id = '';
+                for (var i = 0; i < length; i++) {
+                    id += chars[Math.floor(Math.random() * chars.length)];
+                }
+                return id;
+            }
+
+            function addDetailField() {
+                var detailId = generateRandomId(10);
+                var html = '<div class="receive-detail">' +
+                    '<div class="form-group">' +
+                    '<label for="ReceiveDetails_' + detailCounter + '__IdProduct" class="control-label">Tên sản phẩm</label>' +
+                    '<select class="form-control" id="ReceiveDetails_' + detailCounter + '__IdProduct" name="RecevieDetails[' + detailCounter + '].IdProduct">' +
+                    optionsHtml +
+                    '</select>' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                    '<label for="RecevieDetails_' + detailCounter + '__Number" class="control-label">Số lượng</label>' +
+                    '<input type="text" class="form-control" id="RecevieDetails_' + detailCounter + '__Number" name="RecevieDetails[' + detailCounter + '].Number" />' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                    '<label for="RecevieDetails_' + detailCounter + '__Price" class="control-label">Đơn giá</label>' +
+                    '<input type="text" class="form-control" id="RecevieDetails_' + detailCounter + '__Price" name="RecevieDetails[' + detailCounter + '].Price" />' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                    '<input type="hidden" value="' + detailId + '" id="ReceiveDetails_' + detailCounter + '__Id" name="RecevieDetails[' + detailCounter + '].Id" />';
+                    '</div>' +
+                    '</div>';
+                $('#receiveDetailsContainer').append(html);
+                detailCounter++;
+            }
+
+            $('#addDetailBtn').click(function () {
+                addDetailField();
+            });
+
+
+        });
+    </script>
+}

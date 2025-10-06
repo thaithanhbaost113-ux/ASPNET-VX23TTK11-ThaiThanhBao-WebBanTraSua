@@ -1,0 +1,16 @@
+﻿@model Project.Areas.Identity.Data.Blog
+
+@{
+    ViewData["Title"] = "Blog Detail";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>@Model.Title</h1>
+            <p>@Model.Date.Value.ToString("dd/MM/yyyy")</p>
+            <hr />
+            <div>@Html.Raw(Model.Conten)</div>
+        </div>
+    </div>
+</div>

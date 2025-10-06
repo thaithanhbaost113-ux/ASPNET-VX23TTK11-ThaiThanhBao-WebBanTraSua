@@ -1,0 +1,127 @@
+﻿<style>
+    .contact-section {
+        padding: 50px 0;
+        text-align: center;
+    }
+
+        .contact-section h2 {
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #333;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+        }
+
+        .contact-section p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #555;
+        }
+
+        .contact-section .contact-info {
+            margin-bottom: 40px;
+            text-align: left;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+            .contact-section .contact-info h3 {
+                font-size: 22px;
+                margin-bottom: 15px;
+                color: #007bff;
+            }
+
+            .contact-section .contact-info ul {
+                list-style: none;
+                padding: 0;
+            }
+
+                .contact-section .contact-info ul li {
+                    margin-bottom: 10px;
+                    font-size: 16px;
+                    line-height: 1.5;
+                }
+
+        .contact-section form {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: left;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+
+            .contact-section form h3 {
+                text-align: center;
+                font-size: 20px;
+                color: #007bff;
+                margin-bottom: 20px;
+            }
+
+            .contact-section form .form-group {
+                margin-bottom: 20px;
+            }
+
+            .contact-section form label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
+
+            .contact-section form input,
+            .contact-section form textarea {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-size: 16px;
+            }
+
+            .contact-section form textarea {
+                height: 150px;
+            }
+
+            .contact-section form button {
+                padding: 10px 20px;
+                background-color: #007bff;
+                border: none;
+                color: #fff;
+                font-size: 16px;
+                border-radius: 5px;
+                cursor: pointer;
+                width: 100%;
+            }
+
+                .contact-section form button:hover {
+                    background-color: #0056b3;
+                }
+</style>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="contact-section">
+                <h2>Liên hệ với chúng tôi</h2>
+                <p>Chúng tôi luôn sẵn sàng hỗ trợ bạn. Nếu có bất kỳ câu hỏi, ý kiến, hoặc góp ý nào, hãy liên hệ ngay qua biểu mẫu bên dưới hoặc thông tin liên lạc của chúng tôi.</p>
+                <form>
+                    <h2>Gửi thông tin liên hệ của bạn</h2>
+                    <div class="form-group">
+                        <label for="name">Tên của bạn:</label>
+                        <input type="text" id="name" name="name" placeholder="Nhập tên của bạn">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" placeholder="Nhập email của bạn">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Lời nhắn:</label>
+                        <textarea id="message" name="message" placeholder="Nhập lời nhắn của bạn"></textarea>
+                    </div>
+                    <button type="submit">Gửi liên hệ</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

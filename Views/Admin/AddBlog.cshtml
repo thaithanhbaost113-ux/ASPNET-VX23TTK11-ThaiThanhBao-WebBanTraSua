@@ -1,0 +1,82 @@
+﻿@model Project.Models.BlogModel
+@{
+    Layout = "_DashboardLayout";
+}
+
+<style>
+    .card-header {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h2>@ViewData["Title"]</h2>
+            </div>
+            <div class="card-body">
+                <form asp-action="AddBlog" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label class="control-label">Tiêu đề</label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Chọn ảnh</label>
+                        <input asp-for="ImageFile" type="file" class="form-control" />
+                        <span asp-validation-for="ImageFile" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Nội dung</label>
+                        <textarea id="editor" asp-for="Conten" class="form-control"></textarea>
+                        <span asp-validation-for="Conten" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
+<script>
+    ClassicEditor.create(document.querySelector('#editor'), {
+        ckfinder: {
+            uploadUrl: '/Upload/UploadImage',  // Địa chỉ upload ảnh
+            options: {
+                resourceType: 'Images'
+            }
+        },
+        toolbar: [
+            'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|', 'blockQuote', 'insertTable', 'imageUpload'
+        ],
+        image: {
+            toolbar: [
+                'imageTextAlternative', '|', 'imageStyle:full', 'imageStyle:side', 'imageResize'  // Thêm 'imageResize' vào toolbar
+            ],
+            resizeUnit: '%',  // Đơn vị chỉnh sửa kích thước (có thể sử dụng px hoặc %)
+            styles: [
+                'full', 'side'  // Các kiểu ảnh có thể lựa chọn (full, side, ...)
+            ]
+        },
+        // Cấu hình cho phép resize ảnh trực tiếp trong trình soạn thảo
+        imageResize: {
+            options: [
+                100, 200, 300, 400, 500  // Các kích thước ảnh có sẵn
+            ],
+            unit: 'px'  // Đơn vị chỉnh sửa kích thước
+        }
+    })
+        .catch(error => {
+            console.error(error);
+        });
+</script>
+

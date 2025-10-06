@@ -1,0 +1,461 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Project.Areas.Identity.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]Tiệm trà sữa</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/vendor.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
+    <link rel="stylesheet" href="~/E_Commerce.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script id="mcjs">!function (c, h, i, m, p) { m = c.createElement(h), p = c.getElementsByTagName(h)[0], m.async = 1, m.src = i, p.parentNode.insertBefore(m, p) }(document, "script", "https://chimpstatic.com/mcjs-connected/js/users/94d4ec11206b5dc82bd4fcb74/e1e0661b0629ed3d1222159e6.js");</script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+    <script>
+        var chatbox = document.getElementById('fb-customer-chat');
+        chatbox.setAttribute("page_id", "119220827935668");
+        chatbox.setAttribute("attribution", "biz_inbox");
+    </script>
+
+   
+</head>
+<style>
+    .top-content { 
+        padding: 15px 0;
+        border-bottom: 1px solid #E0E0E0;
+    } 
+
+    .social-links ul {
+        list-style: none;
+        display: flex;
+        margin-bottom: 0;
+    }
+
+    .social-links a {
+        color: var(--dark-text-color);
+        text-decoration: none;
+    }
+
+    .top-content li {
+        padding-right: 30px;
+    }
+
+        .top-content li:last-child {
+            padding-right: 0;
+        }
+
+    .top-content a {
+        color: #555;
+        text-decoration: none;
+    }
+
+    .top-content .right-element {
+        display: flex;
+        float: right;
+    }
+
+    .top-content .right-element .for-buy {
+        margin-right: 40px;
+    }
+    /* - Search Form hover Effects
+    ------------------------------------------------------------- */
+    #header-wrap .action-menu {
+        display: inline-block;
+        align-items: baseline;
+    }
+
+    #header-wrap .action-menu span.opennav.openicon {
+        cursor: pointer;
+    }
+
+    .action-menu .icon {
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    .action-menu .search-bar {
+        overflow: hidden;
+    }
+
+    .action-menu .search-bar,
+    .action-menu .open-icon-wrap {
+        width: 40px;
+        height: 40px;
+        background: #efeee8;
+        border-radius: 40px;
+        display: flex;
+        justify-content: right;
+        align-items: center;
+        cursor: pointer;
+        transition: 0.3s width cubic-bezier(0, 0.75, 0.49, 0.99);
+    }
+
+    #header-wrap .search-button {
+        order: 1;
+        padding-right: 10px;
+        padding-left: 10px;
+        text-decoration: none;
+        color: var(--body-text-color);
+    }
+
+    #header-wrap.show .search-bar {
+        width: 300px;
+    }
+
+    #header-wrap .search-bar form {
+        margin: 0;
+    }
+
+    #header-wrap .search-box .search-input {
+        width: 250px;
+        border: 0;
+        margin-bottom: 0;
+        font-weight: 300;
+        padding-left: 20px;
+        background: #efeee8;
+    }
+
+    #header-wrap .search-box .search-input:focus {
+        box-shadow: none;
+    }
+    input:focus-visible {
+        border: none!important;
+    }
+    .action-menu .side-nav-bar .menu-btn a,
+    .action-menu .searchbar a {
+        color: #000;
+        text-decoration: none;
+        line-height: 2.2;
+    }
+
+    .action-menu .icon.icon-menu-btn:hover {
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .action-menu .menu-btn a {
+        color: #07051a;
+        text-decoration: none;
+    }
+
+    .action-menu .icon.icon-menu-btn:hover {
+        color: var(--accent-color);
+        text-decoration: none;
+    }
+
+    @@media screen and (max-width: 768px) {
+        .action-menu .search-bar {
+            margin-top: 20px;
+            width: 100%;
+        }
+    }
+
+    #header {
+        padding: 10px 0;
+        border-bottom: 1px solid #E0E0E0;
+        background-color: #f3f2ec;
+    }
+
+    #header .menu-list a {
+        text-transform: uppercase;
+        font-weight: 500;
+        letter-spacing: 0.12em;
+    }
+
+    #header .menu-list a.active {
+        color: var(--accent-color);
+    }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+        margin-right: 15px;
+    }
+    
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        right: -6px;
+        width: 87%;
+        z-index: 100;
+        background: #f3f2ec;
+        border-radius: 5px;
+    }
+
+    .dropdown-content ul{
+        margin-top: 10px;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .dropdown-content li {
+        padding-right: 30px;
+        padding: 0 !important;
+        list-style: none;
+        text-align: center;
+        
+    }
+</style>
+<body>
+    <div id="header-wrap">
+        <div class="top-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="social-links">
+                            <ul>
+                                <li>
+                                    <a href="#"><i class="fa-brands fa-faceProduct"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#"<i class="fa-brands fa-x-twitter"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="right-element">
+                            <a href="#" class="user-account for-buy">
+                                @if (SignInManager.IsSignedIn(User))
+                                {
+                                    @if (this.User.IsInRole("User"))
+                                    {
+                                        <div class="dropdown">
+                                            <a title="Manage"><i class="fa-solid fa-user"></i>@UserManager.GetUserName(User)</a>
+                                            <div class="dropdown-content">
+                                                <ul>
+                                                    <li style="margin-top: 10px;"><a asp-area="" asp-controller="Bill" asp-action="ShowALlBill">Lịch sử mua hàng</a></li>
+                                                    <li><a asp-area="Identity" asp-page="/Account/Manage/Index"> Thông tin tài khoản</a></li>
+                                                    <li>
+                                                        <form style="margin: 0;" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                                                            <button style="height: 34px; text-transform: lowercase; display: flex; align-items: center; justify-content: center;  width: 100%;" type="submit" class="p-0 m-0 nav-link btn btn-link text-dark">
+                                                                Đăng xuất
+                                                            </button>
+                                                        </form>
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (this.User.IsInRole("Admin"))
+                                    {
+                                        <div class="dropdown">
+                                            <a title="Manage"><i class="fa-solid fa-user"></i>@UserManager.GetUserName(User)</a>
+                                            <div class="dropdown-content">
+                                                <ul>
+                                                    <li><a asp-area="" asp-controller="Admin" asp-action="AccControl">Bảng điều khiển</a></li>
+                                                    <li><a asp-area="Identity" asp-page="/Account/Manage/Index"> Thông tin tài khoản</a></li>
+                                                    <li>
+                                                        <form style="margin: 0;" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                                                            <button style="padding: 0; height: 34px; text-transform: lowercase; display: flex; align-items: center; justify-content: center;  width: 100%;" type="submit" class="m-0 nav-link btn btn-link text-dark">
+                                                                Đăng xuất
+                                                            </button>
+                                                        </form>
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <a style="margin-right: 15px;" asp-area="Identity" asp-page="/Account/Login">
+                                        <span>Account</span> <i class="fa-solid fa-user"></i>
+                                    </a>
+                                }
+                                
+                            </a>
+                            <a asp-area="" asp-controller="Cart" asp-action="ShowCart" class="cart for-buy">
+                                <span>Cart</span> <i class="fa-solid fa-cart-shopping"></i>
+                            </a>
+
+                            <div class="action-menu">
+
+                                <div class="search-bar">
+                                    <a href="#" class="search-button search-toggle" data-selector="#header-wrap">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </a>
+                                    <form role="search" method="get" class="search-box" asp-action="GetAllProduct" asp-controller="Products">
+                                        <input class="search-field text search-input" placeholder="Search"
+                                               type="search" name="productName">
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div><!--top-right-->
+                    </div>
+
+                </div>
+            </div>
+        </div><!--top-content-->
+
+        <header id="header">
+            <div class="container-fluid">
+                <div class="row">
+
+                    <div class="col-md-2">
+                        <div class="main-logo">
+                            <a style="font-size: 20px; font-weight: bold;" href="/">Tiệm trà sữa</a>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-10">
+
+                        <nav id="navbar">
+                            <div class="main-menu stellarnav">
+                                <ul class="menu-list">
+                                    <li class="menu-item active"><a href="/">Trang chủ</a></li>
+                                    <li class="menu-item"><a asp-controller="Products" asp-action="GetAllProduct" class="nav-link">Sản phẩm</a></li>
+                                    <li class="menu-item"><a href="/Products/about" class="nav-link">Liên hệ</a></li>
+                                    <li class="menu-item"><a href="/Blog/GetAllBlog" class="nav-link">Bài viết</a></li>
+                                </ul>
+
+                                <div class="hamburger">
+                                    <span class="bar"></span>
+                                    <span class="bar"></span>
+                                    <span class="bar"></span>
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </div>
+    <div class="container ">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <footer id="footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="footer-item">
+						<div class="company-brand">
+                            <a style="font-size: 30px; font-weight: bold;" href="/">Tiệm trà sữa</a>
+							<h4>Uy Tín - Niềm Tin - Chất Lượng</h4>
+                            <p>Địa chỉ: Số 2 ngõ 46 đường Canh Nậu 3,Canh Nậu, Thạch Thất, Hà Nội</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="footer-menu">
+						<h5>About Us</h5>
+						<ul class="menu-list">
+							<li class="menu-item">
+								<a href="#">vision</a>
+							</li>
+							<li class="menu-item">
+								<a href="#">articles </a>
+							</li>
+							<li class="menu-item">
+								<a href="#">careers</a>
+							</li>
+							<li class="menu-item">
+								<a href="#">service terms</a>
+							</li>
+							<li class="menu-item">
+								<a href="#">donate</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-2">
+
+					<div class="footer-menu">
+						<h5>Discover</h5>
+						<ul class="menu-list">
+							<li class="menu-item">
+								<a href="#">Home</a>
+							</li>
+							<li class="menu-item">
+								<a href="#">Products</a>
+							</li>
+							<li class="menu-item">
+								<a href="#">Authors</a>
+							</li>
+							<li class="menu-item">
+								<a href="#">Subjects</a>
+							</li>
+							<li class="menu-item">
+								<a href="#">Advanced Search</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="footer-menu">
+						<h5>My account</h5>
+						<ul class="menu-list">
+							<li class="menu-item">
+								<a href="#">Sign In</a>
+							</li>
+							<li class="menu-item">
+								<a href="#">View Cart</a>
+							</li>
+							<li class="menu-item">
+								<a href="#">My Wishtlist</a>
+							</li>
+							<li class="menu-item">
+								<a href="#">Track My Order</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="footer-menu">
+						<h5>Help</h5>
+						<ul class="menu-list">
+							<li class="menu-item">
+								<a href="#">Help center</a>
+							</li>
+							<li class="menu-item">
+								<a href="#">Report a problem</a>
+							</li>
+							<li class="menu-item">
+								<a href="#">Suggesting edits</a>
+							</li>
+							<li class="menu-item">
+								<a href="#">Contact us</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/script.js" asp-append-version="true"></script>
+    <script src="~/js/slideNav.js" asp-append-version="true"></script>
+    <script src="~/js/jquery-1.11.0.min.js" asp-append-version="true"></script>
+    <script src="~/js/modernizr.js" asp-append-version="true"></script>
+    <script src="~/js/plugins.js" asp-append-version="true"></script>
+  
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

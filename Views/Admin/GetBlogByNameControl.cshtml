@@ -1,0 +1,83 @@
+﻿@model IEnumerable<Project.Areas.Identity.Data.Blog>
+@{
+    Layout = "_DashboardLayout";
+}
+<div class="container">
+   
+    <form asp-action="GetBlogByNameControl" method="get">
+        <div class="row search-bar">
+            <div class="col-11">
+                <input class="form-control" placeholder="Nhập tên bài viết..." name="name" />
+            </div>
+            <div class="col-1">
+                <button class="w-100 btn btn-primary m-0" style="height: 37px">Tìm</button>
+            </div>
+        </div>
+    </form>
+
+    <a class="btn btn-success mb-4" data-toggle="modal" data-target="#addEditModal" onclick="openAddModal()"
+       asp-controller="Admin"
+       asp-action="AddBlog">
+        Thêm bài viết
+    </a>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Tiêu đề</th>
+                    <th>Hình ảnh</th>
+                    <th>Ngày đăng</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody id="postsContainer">
+                @foreach (var blog in Model)
+                {
+                    <tr>
+                        <td>@blog.Title</td>
+                        <td><img src="@blog.Image" class="img-fluid" style="max-height: 100px;" /></td>
+                        <td style="min-width: 100px;">@blog.Date?.ToString("yyyy-MM-dd")</td>
+                        <td>
+                            <button style="width: 100%; height: 40px;" class="btn btn-primary btn-sm" onclick="openEditModal(@blog.Id)"><i class="fa fa-edit"></i> Sửa</button>
+                            <button style="width: 100%; height: 40px;" class="btn btn-danger btn-sm" onclick="deletePost(@blog.Id)"><i class="fa fa-trash"></i> Xóa</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="addEditModal" tabindex="-1" role="dialog" aria-labelledby="addEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addEditModalLabel">Thêm/Sửa bài viết</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="postForm">
+                    <div class="form-group">
+                        <label for="postTitle">Tiêu đề</label>
+                        <input type="text" class="form-control" id="postTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="postImage">URL Hình ảnh</label>
+                        <input type="text" class="form-control" id="postImage" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="postDate">Ngày đăng</label>
+                        <input type="date" class="form-control" id="postDate" required>
+                    </div>
+                    <input type="hidden" id="postId">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" onclick="savePost()">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>

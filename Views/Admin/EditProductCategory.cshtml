@@ -1,0 +1,39 @@
+﻿@model Project.Areas.Identity.Data.ProductCategory
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit Product Category</h1>
+<hr />
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <form asp-action="EditProductCategory">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Category Name</label>
+                <input asp-for="Name" class="form-control" placeholder="Enter category name" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <input class="form-check-input" asp-for="Status" />
+                <label class="form-check-label" for="Status">Is Active?</label>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+            <div class="form-group text-center">
+                <input type="submit" value="Save Changes" class="btn btn-success btn-block" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="text-center mt-3">
+    <a asp-action="ProductCategoryControl" class="btn btn-secondary">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

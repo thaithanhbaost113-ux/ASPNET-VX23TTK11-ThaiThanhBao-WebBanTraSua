@@ -1,0 +1,178 @@
+﻿@{
+    var currentPage = ViewBag.CurrentPage;
+}
+
+<style>
+    #banner {
+        background: url('https://i.pinimg.com/736x/c2/82/f9/c282f9250a43aa4e3f4ff62c0280b6da.jpg') no-repeat center center/cover;
+        height: 500px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        color: white;
+        position: relative;
+        padding: 0 50px;
+    }
+
+    #banner .content {
+        width: 50%;
+    }
+
+    #banner h1 {
+        font-size: 3em;
+        margin: 0;
+    }
+
+    #banner p {
+        font-size: 1.5em;
+        margin: 10px 0;
+    }
+
+    #banner .btn {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #ff7f50;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+
+    #banner .btn:hover {
+        background-color: #ff6347;
+    }
+
+    /* Why Choose Us Section */
+    #why-choose-us {
+        margin-top: 100px;
+        padding: 50px 0;
+        background-color: #f8f8f8;
+        text-align: center;
+    }
+
+    #why-choose-us h2 {
+        margin-bottom: 20px;
+    }
+
+    #why-choose-us .features {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+    }
+
+    #why-choose-us .feature {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 250px;
+    }
+
+    #why-choose-us .feature img {
+        width: 50px;
+        height: 50px;
+    }
+
+    #why-choose-us .feature h4 {
+        margin-top: 10px;
+    }
+
+    #testimonials {
+        padding: 50px 0;
+        text-align: center;
+    }
+
+    #testimonials h2 {
+        margin-bottom: 20px;
+    }
+
+    .testimonials-container {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+    }
+
+    .testimonial {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        text-align: center;
+    }
+
+    .testimonial img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin-bottom: 10px;
+    }
+
+    .testimonial p {
+        font-style: italic;
+        margin: 10px 0;
+    }
+
+    .testimonial .author {
+        font-weight: bold;
+        margin-top: 10px;
+    }
+</style>
+
+<div>
+    <!-- Phần Banner -->
+    <section id="banner">
+        <div class="content">
+            <h1>Chào Mừng Đến Với Quán Trà Sữa Của Chúng Tôi</h1>
+            <p>Hương vị tươi mới dành riêng cho bạn!</p>
+            <a href="./Products/GetAllProduct" class="btn">Đặt hàng ngay</a>
+        </div>
+    </section>
+
+    <!-- Phần Tại Sao Chọn Chúng Tôi -->
+    <section id="why-choose-us">
+        <h2>Tại Sao Chọn Chúng Tôi?</h2>
+        <div class="features">
+            <div class="feature">
+                <img src="https://png.pngtree.com/png-vector/20230206/ourmid/pngtree-quality-check-certified-badge-icon-png-image_6583296.png" alt="Chất Lượng">
+                <h4>Nguyên Liệu Chất Lượng Cao</h4>
+                <p>Chúng tôi chỉ sử dụng những nguyên liệu tốt nhất để đảm bảo hương vị tuyệt vời.</p>
+            </div>
+            <div class="feature">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfMRaIcq1APBpTm9JgmZCskwZjb4qqAIC4rQ&s" alt="Dịch Vụ">
+                <h4>Dịch Vụ Thân Thiện</h4>
+                <p>Đội ngũ nhân viên luôn tận tâm phục vụ bạn.</p>
+            </div>
+            <div class="feature">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnvbSVAh8Q3Tw28Ty7QVWlfofIYTTHBBNvAQ&s" alt="Sự Đa Dạng">
+                <h4>Thực Đơn Phong Phú</h4>
+                <p>Khám phá thực đơn với vô số lựa chọn trà sữa hấp dẫn.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Phần Mọi Người Nghĩ Gì -->
+    <section id="testimonials">
+        <h2>Mọi Người Nghĩ Gì Về Chúng Tôi</h2>
+        <div class="testimonials-container">
+            <div class="testimonial">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSSwXe31ix1LBNllRG3_G5J0k-00rVysDTmw&s" alt="Nguyễn Văn A">
+                <p>"Trà sữa ngon nhất mà tôi từng thưởng thức! Hương vị thật tuyệt vời."</p>
+                <div class="author">Nguyễn Văn A</div>
+            </div>
+            <div class="testimonial">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSSwXe31ix1LBNllRG3_G5J0k-00rVysDTmw&s" alt="Trần Thị B">
+                <p>"Quán ấm cúng, dịch vụ chu đáo. Rất đáng để ghé thăm!"</p>
+                <div class="author">Trần Thị B</div>
+            </div>
+            <div class="testimonial">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSSwXe31ix1LBNllRG3_G5J0k-00rVysDTmw&s" alt="Phạm Văn C">
+                <p>"Sự đa dạng và chất lượng hàng đầu. Đây là quán trà sữa yêu thích của tôi."</p>
+                <div class="author">Phạm Văn C</div>
+            </div>
+        </div>
+    </section>
+</div>

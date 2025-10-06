@@ -1,0 +1,177 @@
+﻿	@model Project.Areas.Identity.Data.Product
+
+	<style>
+		.product-details {
+			display: flex;
+			align-items: center;
+			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+			padding: 20px;
+			height: 550px;
+		}
+
+		.product-image {
+			flex: 1;
+			text-align: center;
+		}
+
+		.product-image img {
+			max-width: 80%;
+			max-height: 300px;
+		}
+
+		.product-info {
+			flex: 1;
+			padding: 20px;
+			border: 1px solid #ccc;
+		}
+
+		.product-info h2 {
+			font-size: 24px;
+			margin-bottom: 5px;
+		}
+
+		.product-info p {
+			font-size: 16px;
+			margin-bottom: 10px;
+		}
+
+		.buttons {
+			display: flex;
+			justify-content: center;
+			margin-top: 20px;
+		}
+
+		.modal-body {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100%;
+		}
+
+		.modal-image {
+			display: block;
+			max-width: 80vw;
+			max-height: 80vh;
+			min-width: 70vw;
+			object-fit: contain;
+		}
+
+
+		.img-fluid{
+			max-width: 75%;
+		}
+	</style>
+
+	<div class="container-fluid mt-3">
+		<div class="row">
+			<div class="container-fluid">
+				<div class="product-details">
+					<div class="product-image">
+						<img src="@Model.Images.FirstOrDefault(x => x.IsMain == true).UrlImage"
+							 alt="@Model.NameProduct"
+							 class="img-thumbnail"
+							 style="cursor: pointer;"
+							 data-bs-toggle="modal"
+							 data-bs-target="#imageModal" />
+
+						<div class="d-flex mt-5">
+							<div class="col">Số lượng bán @Model.Sales sản phẩm</div>
+							<div class="col d-flex" style="align-items: center;">
+								<div>Chia sẻ</div>
+								<a href=""><i style="color: #010d85; margin-left: 5px" class="fab fa-faceProduct"></i></a>
+								<a href=""><i style="color: blue; margin-left: 5px" class="fab fa-faceProduct-messenger"></i></a>
+								<a href=""><i style="color:  #e80103; margin-left: 5px" class="fab fa-instagram"></i></a>
+								<a href=""><i style="color: #49bcd7; margin-left: 5px" class="fab fa-twitter"></i></a>
+							</div>
+
+						</div>
+					</div>
+					<div class="col-md-6 product-info" style="height: 400px;">
+						<p style="font-size: 28px;">@Model.NameProduct</p>
+						<a style="text-decoration: none;" href=""><p>Loại sản phẩm: @Model.ProductCategory.Name</p></a>
+						<p style="color: #ff3201; font-size: 30px; margin-bottom: -8px;margin-top: 25px;">Giá: @Model.Price?.ToString("N0") VNĐ</p>
+						<p style=" margin-bottom: 30px;"><i>(Miễn phí vận chuyện với đơn hàng dưới 50Km)</i></p>
+						@if (Model.Status == 0)
+						{
+							<p>Tình trạng: <i>Hết hàng</i></p>
+						}
+						else
+						{
+							<p>Tình trạng: <i>Còn hàng</i></p>
+						}
+						<div class="quantity-input">
+							<label for="quantity">Số lượng:</label>
+							<input id="myInput" type="number" min="1" value="1" class="form-control" />
+						</div>
+
+
+						<div class="buttons" style="justify-content: space-between; align-items:center">
+							<button id="buyNowBtn" class="btn btn-success col-5" style="height: 40px;">
+								Mua ngay
+							</button>
+
+							<a id="addToCartBtn" class="btn btn-primary float-right col-5" style="height: 40px; margin: 15px 0;">
+								<i class="fas fa-cart-plus"></i>
+								Thêm vào giỏ hàng
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-body p-0">
+					<img src="@Model.Images.FirstOrDefault(x => x.IsMain == true).UrlImage" class="modal-image" alt="Product Image" />
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$(document).ready(function () {
+			$('#buyNowBtn').on('click', function () {
+				const quantity = $('#myInput').val() || 1;
+				const productId = '@Model.Id';
+				$.ajax({
+					url: '/Cart/InfoOrder',
+					method: 'GET',
+					data: {
+						IDProduct: productId,
+						number: quantity
+					},
+					success: function (response) {
+						document.write(response);
+					},
+					error: function (xhr, status, error) {
+						console.error('Lỗi: ', error);
+						alert('Yêu cầu không thành công!');
+					}
+				});
+			});
+		});
+
+		$(document).ready(function () {
+			$('#addToCartBtn').on('click', function () {
+				const quantity = $('#myInput').val() || 1;
+				const productId = '@Model.Id';
+
+				$.ajax({
+					url: '/Cart/AddItem',
+					method: 'GET',
+					data: {
+						IDProduct: productId,
+						number: quantity
+					},
+					success: function (response) {
+						alert('Đã thêm vào giỏ hàng thành công!');
+					},
+					error: function (xhr, status, error) {
+						alert('Có lỗi xảy ra, vui lòng thử lại!');
+					}
+				});
+			});
+		});
+	</script>

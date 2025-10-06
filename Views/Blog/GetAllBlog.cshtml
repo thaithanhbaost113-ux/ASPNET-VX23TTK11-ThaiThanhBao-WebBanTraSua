@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Project.Areas.Identity.Data.Blog>
+<style>
+    .card-img-top {
+        max-height: 200px;
+        object-fit: cover;
+    }
+
+    .card-body {
+        height: 150px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .search-bar {
+        margin-bottom: 2rem;
+    }
+</style>
+
+<h3 class="text-center my-4">Danh sản phẩm bài viết</h3>
+
+<div class="container">
+    <form asp-action="GetBlogs" method="get">
+        <div class="row search-bar">
+            <div class="col-11">
+                <input class="form-control" placeholder="Nhập tên bài viết..." name="name" />
+            </div>
+            <div class="col-1">
+                <button class="w-100 btn btn-primary m-0" style="height: 37px">Tìm</button>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        @foreach(var item in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="@item.Image" class="card-img-top" />
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a style="font-weight: bold" asp-action="GetBlog" asp-route-Id="@item.Id">@item.Title</a>
+                        </h5>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <small class="text-muted">
+                            <button class="m-0 p-0" style="border: none; background: none; height: 25px;"><i style="color: red" class="fa-regular fa-heart"></i></button>
+                        </small>
+                        <small style="height: 25px;" class="text-muted">Đăng ngày @item.Date?.ToString("dd-MM-yyyy")</small>
+                    </div>
+                </div>
+            </div>
+        }
+        
+    </div>
+</div>

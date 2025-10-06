@@ -1,0 +1,117 @@
+﻿@model List<Project.Areas.Identity.Data.CartDetail>
+@{
+    decimal? sum = 0;
+    decimal? number = 0;
+}
+<style>
+    .cart-item {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .cart-item:hover {
+        transform: scale(1.02);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-delete-item {
+        background-color: #ff6b6b;
+        border: none;
+    }
+
+    .btn-delete-item:hover {
+        background-color: #ff5252;
+    }
+
+    .btn-lg {
+        font-size: 1.1rem;
+        padding: 0.75rem 1.5rem;
+    }
+</style>
+<div class="container my-5">
+    <h1 class="text-center mb-4">Giỏ hàng của bạn</h1>
+    @if (Model.Count > 0)
+    {
+        <form method="post" asp-action="UpdateCart" asp-controller="Cart">
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    sum += item.Price * item.Number;
+                    number += item.Number;
+                    <div class="col-md-12 mb-3">
+                        <div class="cart-item border shadow-sm p-3 rounded">
+                            <div class="row align-items-center">
+                                <div class="col-md-2">
+                                    <img class="img-fluid rounded shadow-sm"
+                                         src="@item.IdProductNavigation.Images.FirstOrDefault(x => x.IsMain == true)?.UrlImage"
+                                         alt="Product Image">
+                                </div>
+                                <div class="col-md-6">
+                                    <h5 class="fw-bold">@item.IdProductNavigation.NameProduct</h5>
+                                    <p class="text-muted mb-2">Giá: <span class="fw-bold text-danger">@item.Price?.ToString("N0") VNĐ</span></p>
+                                    <div class="d-flex align-items-center">
+                                        <label for="quantity-@item.Id" class="me-3">Số lượng:</label>
+                                        <input type="number"
+                                               id="quantity-@item.Id"
+                                               name="Quantities[@item.Id]"
+                                               value="@item.Number"
+                                               min="1"
+                                               class="form-control form-control-sm w-auto">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 d-flex justify-content-end">
+                                    <button class="btn btn-danger btn-sm btn-delete-item"
+                                            data-id="@item.Id">
+                                        <i class="bi bi-trash me-1"></i> Xóa
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Tổng tiền và các nút hành động -->
+            <div class="d-flex justify-content-between align-items-center mt-4 p-3 border rounded shadow-sm">
+                <p class="fs-5 mb-0 fw-bold">Tổng tiền: <span class="text-danger">@sum?.ToString("N0") VNĐ</span></p>
+                <div>
+                    <button style="height: 50px; width: 180px;" type="submit" class="btn btn-primary  me-3 shadow">Cập nhật</button>
+                    <a style="height: 50px; width: 180px;"
+                       class="btn btn-success btn-lg shadow d-flex align-items-center justify-content-center"
+                       asp-controller="Cart"
+                       asp-action="InfoOrder"
+                       asp-route-idItem="@string.Join(",", Model.Select(x => x.Id))"
+                       asp-route-IdProduct="@string.Join(",", Model.Select(x => x.IdProduct))">
+                        <i class="bi bi-cart-check me-2"></i> Mua Tất Cả
+                    </a>
+                </div>
+            </div>
+        </form>
+    }
+    else
+    {
+        <div class="alert alert-info text-center mt-3">
+            <i class="bi bi-cart-x fs-4"></i> Hiện tại giỏ hàng của bạn đang trống.
+        </div>
+    }
+</div>
+
+<script>
+    document.querySelectorAll('.btn-delete-item').forEach(button => {
+        button.addEventListener('click', function () {
+            const id = this.getAttribute('data-id');
+            fetch('/Cart/DeleteItemCart', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(id) 
+            })
+                .then(response => {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        alert('Có lỗi xảy ra khi xóa sản phẩm!');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    });
+</script>

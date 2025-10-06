@@ -1,0 +1,204 @@
+﻿@model List<Project.Areas.Identity.Data.Product>
+@using Project.Areas.Identity.Data
+@{
+    var categories = ViewBag.Categories as List<ProductCategory>;
+    var currentCategory = ViewData["Category"]?.ToString();
+    var currentPage = ViewBag.CurrentPage;
+}
+
+<style>
+    .Productshelf {
+        background-color: #fff;
+        border-radius: 20px;
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+
+    .tabs {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+        list-style: none;
+        padding: 0;
+        border-bottom: 2px solid #f9d7d7; 
+    }
+
+    .tabs .tab {
+        padding: 10px 15px;
+        cursor: pointer;
+        color: #7a4a41; 
+        font-weight: bold;
+        transition: all 0.3s;
+    }
+
+    .tabs .tab.active {
+        border-bottom: 3px solid #ff8a8a;
+        color: #ff8a8a; 
+    }
+
+    .product-item {
+        background: #fff;
+        border: 1px solid #ffe6e6; 
+        border-radius: 15px;
+        overflow: hidden;
+        text-align: center;
+        padding: 15px;
+        transition: all 0.3s;
+    }
+
+    .product-item:hover {
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        transform: translateY(-5px);
+    }
+
+    .product-style img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-bottom: 1px solid #ffe6e6;
+    }
+
+    .add-to-cart a {
+        display: inline-block;
+        padding: 8px 12px;
+        background-color: #ff8a8a;
+        color: #fff;
+        border-radius: 20px;
+        font-size: 14px;
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+
+    .add-to-cart a:hover {
+        background-color: #ff6a6a;
+    }
+
+    h3 a {
+        font-size: 16px;
+        color: #7a4a41;
+        text-decoration: none;
+    }
+
+    h3 a:hover {
+        color: #ff8a8a;
+    }
+
+    .item-price {
+        font-size: 18px;
+        color: #ff8a8a;
+        font-weight: bold;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        list-style: none;
+        padding: 0;
+        margin: 20px 0;
+    }
+
+    .pagination li {
+        margin: 0 5px;
+    }
+
+    .pagination li a {
+        display: block;
+        padding: 10px 15px;
+        background: #ffe6e6;
+        color: #7a4a41;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+
+    .pagination li.active a {
+        background: #ff8a8a;
+        color: #fff;
+    }
+
+    .pagination li a:hover {
+        background: #ff6a6a;
+        color: #fff;
+    }
+</style>
+
+<div>
+    <div class="row">
+        <section id="popular-Products" class="Productshelf py-5 my-5">
+        <div class="container">
+            <div class="row">
+                <ul class="tabs">
+                    <li class="tab @(string.IsNullOrEmpty(currentCategory) ? "active" : "")">
+                        <a href="@Url.Action("GetAllProduct", new { page = currentPage, category = "" })">Tất cả</a>
+                    </li>
+                    @foreach (var category in categories)
+                    {
+                        <li class="tab @(currentCategory == category.Name ? "active" : "")">
+                            <a href="@Url.Action("GetAllProduct", new { page = currentPage, category = category.Name })">@category.Name</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="tab-content active" id="item-1">
+                <div id="all-genre">
+                    <div class="row">
+                        @foreach (var item in Model)
+                        {
+                            <div class="col-md-3 mt-3">
+                                <div class="product-item">
+                                    <figure class="product-style">
+                                        <img src="@item.Images.FirstOrDefault(x => x.IsMain == true)?.UrlImage" alt="Products" class="product-item">
+                                        <button class="add-to-cart">
+                                            <a asp-controller="Cart"
+                                                asp-action="AddItem"
+                                                asp-route-IDProduct="@item.Id"
+                                                asp-route-number="1"
+                                                id="showMessageBtn">
+                                                Thêm vào giỏ hàng
+                                            </a>
+                                        </button>
+                                    </figure>
+                                    <figcaption>
+                                        <h3>
+                                            <a asp-controller="Products"
+                                                asp-action="GetProductById"
+                                                asp-route-id="@item.Id">
+                                                @item.NameProduct
+                                            </a>
+                                        </h3>
+                                        <span>@item.ProductCategory.Name</span>
+                                        <div class="item-price">@item.Price?.ToString("N0") VNĐ</div>
+                                    </figcaption>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <nav>
+                        <ul class="pagination">
+                            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                            {
+                                <li class="@(i == currentPage ? "active" : "")">
+                                    <a href="@Url.Action("GetAll", new { page = i, category = currentCategory })">@i</a>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</div>
+
+<script>
+    document.querySelectorAll('.tabs .tab').forEach(tab => {
+        tab.addEventListener('click', function () {
+            document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            const target = document.querySelector(this.dataset.tabTarget);
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            target.classList.add('active');
+        });
+    });
+</script>

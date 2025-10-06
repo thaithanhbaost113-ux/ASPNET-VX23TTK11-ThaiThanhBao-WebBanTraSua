@@ -1,0 +1,222 @@
+﻿@model List<Project.Areas.Identity.Data.Bill>
+@{
+    Layout = "_DashboardLayout";
+}
+<style>
+    .popup {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .popup-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+    }
+
+    .order-card {
+        box-shadow: 1px 3px 20px 0px gray;
+        border-radius: 10px;
+        margin-bottom: 30px;
+    }
+
+    .form-group .form-control {
+        width: 300px;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Thông kê doanh thu</h2>
+            <div class="card p-4" style="border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <form class="d-flex justify-content-between align-items-center" method="post" asp-action="OrderBillControl">
+                    <div class="form-group mr-3">
+                        <label for="startDate">Từ ngày:</label>
+                        <input type="date" class="form-control" id="startDate" name="startDate" required>
+                    </div>
+                    <div class="form-group mr-3">
+                        <label for="endDate">Đến ngày:</label>
+                        <input type="date" class="form-control" id="endDate" name="endDate" required>
+                    </div>
+                    <button style="height: 35px; width: 100px" type="submit" class="btn btn-primary">Xem</button>
+                </form>
+
+
+                <div id="revenueStats" class="mt-4">
+                    <h4 class="mb-4">
+                        Từ @ViewBag.StartDate.ToString("dd/MM/yyyy") đến @ViewBag.EndDate.ToString("dd/MM/yyyy")
+                    </h4>
+                    <p><strong>Tổng doanh thu:</strong> @Model.Where(x => x.Status == 5).Sum(x => x.Total).ToString("N0") VNĐ</p>
+                    <p><strong>Tổng số đơn hàng:</strong> @Model.Count</p>
+                    <p><strong>Số lượng đơn hàng đã thanh toán:</strong> @Model.Where(x => x.Status == 5).Count()</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h3 class="d-flex justify-content-center">Danh sản phẩm đơn hàng</h3>
+    @if(Model.Count != 0)
+    {
+        @foreach (var order in Model)
+        {
+            <div class="order-card mt-3">
+                <div class="card-header">
+                    Mã đơn hàng: @order.Id
+                </div>
+                <div class="card-body">
+                    <p>Khách hàng: @order.Name</p>
+                    <p>Email: @order.User.Email</p>
+                    <p>Địa chỉ: @order.Address</p>
+                    <p>Ngày mua: @order.BuyingDate</p>
+                    <p>Tổng tiền: @order.Total.ToString("N0") VNĐ</p>
+                    @foreach (var item in order.BillItems)
+                    {
+                        <div class="d-flex row mt-3" style="align-items: center; border-radius: 5px; background: #EEEEEE">
+
+                            <div class="col" style="">
+                                <p class="card-title"><b>@item.Name</b></p>
+                            </div>
+                            <div class="col">
+                                <img style="height: 100px; width: auto;" src="@item.UrlImage" class="card-img-top img-fixed-size" alt="...">
+                            </div>
+                            <div class="col">
+                                <p class="card-text">Giá: @item.Price?.ToString("N0") VNĐ</p>
+                            </div>
+                            <div class="col">
+                                <p class="card-text">Số lượng: @item.Number</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <i style="font-weight: bold; font-size: 20px;">Không có đơn hàng nào</i>
+    }
+</p>
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Row information</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    document.getElementById('openPopupBtn').addEventListener('click', function () {
+        document.getElementById('popupContainer').style.display = 'block';
+    });
+    document.addEventListener('click', function (event) {
+        var popup = document.getElementById('popupContainer');
+        if (event.target == popup) {
+            popup.style.display = 'none';
+        }
+    });
+
+    $(document).ready(function () {
+        document.title = "Simple DataTable";
+        $("#example").DataTable({
+            dom: '<"dt-buttons"Bf><"clear">lirtp',
+            paging: false,
+            autoWidth: true,
+            columnDefs: [{ orderable: false, targets: 5 }],
+            buttons: [
+                "colvis",
+                "copyHtml5",
+                "csvHtml5",
+                "excelHtml5",
+                "pdfHtml5",
+                "print"
+            ]
+        });
+
+        $(".dt-add").each(function () {
+            $(this).on("click", function (evt) {
+                var rowData = [];
+                var table = $("#example").DataTable();
+                var info = table.page.info();
+                rowData.push(info.recordsTotal + 1);
+                rowData.push("New Order");
+                var date1 = new Date(2016, 01, 01);
+                var date2 = new Date(2018, 12, 31);
+                var rndDate = new Date(+date1 + Math.random() * (date2 - date1)); //.toLocaleDateString();
+                rowData.push(
+                    rndDate.getFullYear() +
+                    "/" +
+                    (rndDate.getMonth() + 1) +
+                    "/" +
+                    rndDate.getDate()
+                );
+                rowData.push("NEW");
+                rowData.push(Math.floor(Math.random() * 2000) + 1);
+                rowData.push(
+                    '<button type="button" class="btn btn-primary btn-xs dt-edit" style="margin-right:16px;"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button><button type="button" class="btn btn-danger btn-xs dt-delete"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>'
+                );
+                table.row.add(rowData).draw(false);
+            });
+        });
+        $(".dt-edit").each(function () {
+            $(this).on("click", function (evt) {
+                $this = $(this);
+                var dtRow = $this.parents("tr");
+                $("div.modal-body").innerHTML = "";
+                $("div.modal-body").append("Row index: " + dtRow[0].rowIndex + "<br/>");
+                $("div.modal-body").append(
+                    "Number of columns: " + dtRow[0].cells.length + "<br/>"
+                );
+                for (var i = 0; i < dtRow[0].cells.length; i++) {
+                    $("div.modal-body").append(
+                        "Cell (column, row) " +
+                        dtRow[0].cells[i]._DT_CellIndex.column +
+                        ", " +
+                        dtRow[0].cells[i]._DT_CellIndex.row +
+                        " => innerHTML : " +
+                        dtRow[0].cells[i].innerHTML +
+                        "<br/>"
+                    );
+                }
+                $("#myModal").modal("show");
+            });
+        });
+        $(".dt-delete").each(function () {
+            $(this).on("click", function (evt) {
+                $this = $(this);
+                var dtRow = $this.parents("tr");
+                if (confirm("Are you sure to delete this row?")) {
+                    var table = $("#example").DataTable();
+                    table
+                        .row(dtRow[0].rowIndex - 1)
+                        .remove()
+                        .draw(false);
+                }
+            });
+        });
+        $("#myModal").on("hidden.bs.modal", function (evt) {
+            $(".modal .modal-body").empty();
+        });
+    });
+
+</script>
